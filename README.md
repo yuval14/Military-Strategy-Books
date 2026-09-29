@@ -2,7 +2,7 @@
 
 A curated, international catalog of books on military strategy, strategic thought, and the relationship between force and policy.
 
-The catalog records each book's **country or tradition of origin** separately from its publisher and from the country it studies. Its initial entries span ancient and modern works associated with China, France, Greece, India, Israel, Japan, Prussia/Germany, the United Kingdom, and the United States. This is a growing reference project, not an exhaustive survey of every country's literature.
+The catalog records each book's **country or tradition of origin** separately from its publisher and from the country it studies. Its growing entries span ancient and modern works associated with Australia, China, Egypt, Finland, France, Greece, India, Iran-focused scholarship, Israel, Japan, Norway, Prussia/Germany, the Soviet Union, the United Kingdom, and the United States. This is a growing reference project, not an exhaustive survey of every country's literature.
 
 ## Browse
 
