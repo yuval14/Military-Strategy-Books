@@ -6,7 +6,7 @@ The catalog records each book's **country or tradition of origin** separately fr
 
 ## Browse
 
-- [Interactive catalog](https://yuval14.github.io/Military-Strategy-Books/) — filter by country and book type, search, and sort from menus
+- [Interactive catalog](https://yuval14.github.io/Military-Strategy-Books/) — filter by country and book type, search, and sort from menus. To publish it, enable GitHub Pages under Settings > Pages and select GitHub Actions as the source; the deployment workflow is ready.
 - [Catalog](CATALOG.md) — titles, authors, origin, summaries, publication details, ISBNs, and sources
 - [Sources and method](SOURCES_AND_METHOD.md) — selection rules and how country of origin is assigned
 - [Terms of use](TERMS_OF_USE.md)
