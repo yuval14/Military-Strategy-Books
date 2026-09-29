@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Search, filter, and sort a global catalog of military strategy books.">
+  <title>Military Strategy Books - Interactive Catalog</title>
+  <style>
+    :root { color-scheme: light; --ink:#172033; --muted:#596579; --line:#dce2ea; --blue:#1d4ed8; --wash:#f5f7fb; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif; background:#fff; }
+    header { background:linear-gradient(135deg,#10213d,#173d6b); color:white; padding:2.4rem max(1rem,calc((100vw - 1280px)/2)); }
+    header h1 { margin:0 0 .5rem; font-size:clamp(1.8rem,4vw,2.7rem); line-height:1.15; }
+    header p { margin:.35rem 0; max-width:850px; color:#e1e9f4; }
+    header a { color:white; }
+    main { max-width:1280px; margin:auto; padding:1.5rem 1rem 3rem; }
+    .controls { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:1rem; padding:1rem; background:var(--wash); border:1px solid var(--line); border-radius:12px; margin-bottom:1rem; }
+    label { display:grid; gap:.35rem; color:#344054; font-weight:650; }
+    input,select { min-height:42px; width:100%; border:1px solid #aeb8c8; border-radius:7px; padding:.55rem .7rem; color:var(--ink); background:white; font:inherit; }
+    input:focus,select:focus { outline:3px solid #bfdbfe; border-color:var(--blue); }
+    .status { color:var(--muted); margin:.75rem 0; }
+    .table-wrap { overflow:auto; border:1px solid var(--line); border-radius:10px; }
+    table { width:100%; min-width:1450px; border-collapse:collapse; }
+    th,td { text-align:left; vertical-align:top; padding:.75rem; border-bottom:1px solid var(--line); }
+    th { position:sticky; top:0; z-index:1; background:#edf2f8; font-size:.9rem; }
+    tbody tr:nth-child(even) { background:#fafbfd; }
+    tbody tr:hover { background:#eef5ff; }
+    td:nth-child(1) { text-align:right; font-variant-numeric:tabular-nums; }
+    td:nth-child(3) { min-width:300px; max-width:500px; }
+    td:nth-child(10),td:nth-child(11) { min-width:180px; }
+    a { color:#174ea6; }
+    .error { padding:1rem; background:#fff2f0; color:#8b1b10; border:1px solid #f4c7c3; border-radius:8px; }
+    footer { color:var(--muted); margin-top:1.2rem; font-size:.9rem; }
+    @media (max-width:600px) { header { padding:1.5rem 1rem; } main { padding:1rem .65rem 2rem; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Military Strategy Books</h1>
+    <p>An international catalog of military strategy, strategic thought, and the relationship between force and policy.</p>
+    <p><a href="./CATALOG.md">Open the complete Markdown catalog</a> · <a href="https://github.com/yuval14/Military-Strategy-Books">View the GitHub repository</a></p>
+  </header>
+  <main>
+    <section class="controls" aria-label="Catalog filters and sorting">
+      <label for="search">Search titles, summaries, authors, and ISBNs
+        <input id="search" type="search" placeholder="Type to search..." autocomplete="off">
+      </label>
+      <label for="country">Country or tradition
+        <select id="country"><option value="">All countries</option></select>
+      </label>
+      <label for="type">Book type
+        <select id="type"><option value="">All types</option></select>
+      </label>
+      <label for="sort">Sort by
+        <select id="sort">
+          <option value="0">Catalog number</option>
+          <option value="1">Book title</option>
+          <option value="2">Summary</option>
+          <option value="3">Author(s)</option>
+          <option value="4">Country or tradition</option>
+          <option value="5">Year / edition</option>
+          <option value="6">Publisher</option>
+          <option value="8">Type</option>
+        </select>
+      </label>
+      <label for="direction">Sort order
+        <select id="direction">
+          <option value="asc">Ascending</option>
+          <option value="desc">Descending</option>
+        </select>
+      </label>
+    </section>
+    <p id="status" class="status" aria-live="polite">Loading catalog…</p>
+    <div class="table-wrap">
+      <table id="catalog" hidden>
+        <thead></thead><tbody></tbody>
+      </table>
+    </div>
+    <footer>Summaries are original descriptions. Publication and access links point to publishers, lawful free texts, or catalog records. The catalog is curated and not exhaustive.</footer>
+  </main>
+  <script>
+    const columns = ["No.","Book","Summary","Author(s) / editor(s)","Country or tradition of origin","Year / edition","Publisher","ISBN","Type","Publisher / legal access","Sources"];
+    let books = [];
+    const esc = value => value.replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+    function inlineMarkdown(value) {
+      let out = esc(value);
+      out = out.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+      out = out.replace(/\*([^*]+)\*/g, "<em>$1</em>");
+      return out;
+    }
+    function cells(line) { return line.slice(1,-1).split("|").map(x => x.trim()); }
+    function fillSelect(id, values) {
+      const select = document.getElementById(id);
+      [...new Set(values.filter(Boolean))].sort((a,b)=>a.localeCompare(b)).forEach(value => {
+        const option=document.createElement("option"); option.value=value; option.textContent=value; select.append(option);
+      });
+    }
+    function compare(a,b,index) {
+      if(index===0) return Number(a[0])-Number(b[0]);
+      if(index===5) {
+        const ya=(a[index].match(/\d{4}/)||["9999"])[0];
+        const yb=(b[index].match(/\d{4}/)||["9999"])[0];
+        return Number(ya)-Number(yb);
+      }
+      return a[index].localeCompare(b[index],undefined,{numeric:true,sensitivity:"base"});
+    }
+    function render() {
+      const query=document.getElementById("search").value.trim().toLocaleLowerCase();
+      const country=document.getElementById("country").value;
+      const type=document.getElementById("type").value;
+      const sortIndex=Number(document.getElementById("sort").value);
+      const direction=document.getElementById("direction").value==="asc"?1:-1;
+      const filtered=books.filter(row=>
+        (!country || row[4]===country) &&
+        (!type || row[8]===type) &&
+        (!query || row.join(" ").toLocaleLowerCase().includes(query))
+      ).sort((a,b)=>direction*compare(a,b,sortIndex));
+      const body=document.querySelector("#catalog tbody");
+      body.innerHTML=filtered.map(row=>"<tr>"+row.map((cell,i)=>"<td>"+(i===0?esc(cell):inlineMarkdown(cell))+"</td>").join("")+"</tr>").join("");
+      document.getElementById("status").textContent=filtered.length+" of "+books.length+" books";
+    }
+    async function load() {
+      try {
+        const response=await fetch("./CATALOG.md");
+        if(!response.ok) throw new Error("HTTP "+response.status);
+        const markdown=await response.text();
+        books=markdown.split(/\r?\n/).filter(line=>/^\| \d+ \|/.test(line)).map(cells);
+        if(!books.length) throw new Error("No catalog rows found");
+        if(books.some(row=>row.length!==columns.length)) throw new Error("Catalog table has inconsistent columns");
+        fillSelect("country",books.map(row=>row[4]));
+        fillSelect("type",books.map(row=>row[8]));
+        const head=document.querySelector("#catalog thead");
+        head.innerHTML="<tr>"+columns.map((label,i)=>"<th scope=\"col\">"+esc(label)+"</th>").join("")+"</tr>";
+        document.getElementById("catalog").hidden=false;
+        ["search","country","type","sort","direction"].forEach(id=>document.getElementById(id).addEventListener(id==="search"?"input":"change",render));
+        render();
+      } catch(error) {
+        document.getElementById("status").innerHTML='<span class="error">Could not load the catalog: '+esc(String(error.message))+'. Open <a href="./CATALOG.md">CATALOG.md</a> directly.</span>';
+      }
+    }
+    load();
+  </script>
+</body>
+</html>
