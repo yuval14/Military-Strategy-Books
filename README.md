@@ -2,10 +2,11 @@
 
 A curated, international catalog of books on military strategy, strategic thought, and the relationship between force and policy.
 
-The catalog records each book's **country or tradition of origin** separately from its publisher and from the country it studies. Its growing entries span ancient and modern works associated with Australia, China, Egypt, Finland, France, Greece, India, Iran-focused scholarship, Israel, Japan, Norway, Prussia/Germany, the Soviet Union, the United Kingdom, and the United States. This is a growing reference project, not an exhaustive survey of every country's literature.
+The catalog records each book's **country or tradition of origin** separately from its publisher and from the country it studies. Its growing entries span ancient and modern works associated with Australia, Brazil, Canada, China, Egypt, Finland, France, Greece, India, Iran-focused scholarship, Israel, Japan, Norway, Pakistan, Poland, Prussia/Germany, South Africa, Sweden, Taiwan, Turkey, Vietnam, the Soviet Union, the United Kingdom, and the United States. This is a growing reference project, not an exhaustive survey of every country's literature.
 
 ## Browse
 
+- [Interactive catalog](https://yuval14.github.io/Military-Strategy-Books/) — filter by country and book type, search, and sort from menus
 - [Catalog](CATALOG.md) — titles, authors, origin, summaries, publication details, ISBNs, and sources
 - [Sources and method](SOURCES_AND_METHOD.md) — selection rules and how country of origin is assigned
 - [Terms of use](TERMS_OF_USE.md)
