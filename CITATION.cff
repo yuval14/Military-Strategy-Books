@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this catalog, please cite it as below."
+title: "Military Strategy Books"
+type: dataset
+authors:
+  - family-names: Sinay
+    given-names: Yuval
+date-released: 2026-09-29
+license: CC-BY-4.0
+repository-code: "https://github.com/yuval14/Military-Strategy-Books"
+url: "https://github.com/yuval14/Military-Strategy-Books"
