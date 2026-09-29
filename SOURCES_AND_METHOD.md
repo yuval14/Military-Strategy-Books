@@ -8,7 +8,7 @@ This is a curated, expanding bibliography of writing about military strategy and
 
 “Country or tradition of origin” records the main intellectual, institutional, or historical tradition in which a work was produced. For ancient works, modern borders may not apply; the table uses a recognizable present-day geographic label with a historical qualifier where helpful. For comparative books or studies written abroad, the catalog distinguishes origin from subject country in the table.
 
-An author's nationality alone does not determine a work's origin. Translations are recorded as editions of the source work, and the country of the translator or publisher does not replace the source tradition.
+An author's nationality alone does not determine a work's origin. Translations are recorded as editions of the source work, and the country of the translator or publisher does not replace the source tradition. For a study written outside the country it examines, the catalog identifies the author's or work's origin and labels the country studied separately, for example “United States (Iran-focused study).”
 
 ## Source hierarchy
 
