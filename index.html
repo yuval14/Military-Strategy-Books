@@ -79,7 +79,7 @@
     <footer>Summaries are original descriptions. Publication and access links point to publishers, lawful free texts, or catalog records. The catalog is curated and not exhaustive.</footer>
   </main>
   <script>
-    const columns = ["No.","Book","Summary","Author(s) / editor(s)","Country or tradition of origin","Year / edition","Publisher","ISBN","Type","Publisher / legal access","Sources"];
+    const columns = ["No.","Book","Author(s) / editor(s)","Summary","Country or tradition of origin","Year / edition","Publisher","ISBN","Type","Publisher / legal access","Sources"];
     let books = [];
     const esc = value => value.replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
     function inlineMarkdown(value) {
